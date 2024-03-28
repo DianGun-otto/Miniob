@@ -344,11 +344,14 @@ bool Value::get_boolean() const
 
 //**********************************************************
 //-------------------------辅助函数--------------------------
+
+//-------------------------date_to_days---------------------
 int Value::date_to_days(int year,int month,int day)
   {
    int days = 0;
+    int y = 0;
     // 计算年份之间的天数差
-    for (int y = 1900; y < year; ++y) {
+    for (;y < year; ++y) {
         days += is_leap_year(y) ? 366 : 365;
     }
     // 计算给定年份中月份之前的天数
@@ -376,7 +379,7 @@ int Value::days_in_month(int year, int month)const
 
 std::string Value::days_to_datestr(int val)const
 {
-  int year = 1900;
+  int year = 0;
   while (val >= 365) {
     val -= (is_leap_year(year) ? 366 : 365);
     year++;
@@ -387,7 +390,9 @@ std::string Value::days_to_datestr(int val)const
       month++;
   }
     std::ostringstream oss;
-    oss << year << "-" << std::setw(2) << std::setfill('0') << month << "-" << std::setw(2) << std::setfill('0') << val + 1;
+    oss << std::setw(4)<< std::setfill('0')<<year << "-" 
+        << std::setw(2) << std::setfill('0') << month <<"-"
+        << std::setw(2) << std::setfill('0') << val + 1;
     return oss.str();
 }
 
