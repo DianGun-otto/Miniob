@@ -16,9 +16,11 @@ See the Mulan PSL v2 for more details. */
 #include "common/lang/comparator.h"
 #include "common/lang/string.h"
 #include "common/log/log.h"
+#include <ctime>
 #include <sstream>
+#include <iomanip>
 
-const char *ATTR_TYPE_NAME[] = {"undefined", "chars", "ints", "floats", "booleans"};
+const char *ATTR_TYPE_NAME[] = {"undefined", "chars", "ints", "dates", "floats", "booleans"};
 
 const char *attr_type_to_string(AttrType type)
 {
@@ -44,6 +46,21 @@ Value::Value(float val) { set_float(val); }
 Value::Value(bool val) { set_boolean(val); }
 
 Value::Value(const char *s, int len /*= 0*/) { set_string(s, len); }
+
+//***********************date类构造函数*******************************
+Value::Value(const char *s, int len , int flag){
+  std::istringstream iss(s);
+  int year,month,day;
+  char dash;
+  iss>>year>>dash>>month>>dash>>day;
+  if(!isValidDate(year,month,day)){
+    throw std::string("invalid date");
+    return;
+  }
+  int val=date_to_sec(year,month,day);
+  set_date(val);
+}
+//*******************************************************************
 
 void Value::set_data(char *data, int length)
 {
@@ -74,6 +91,15 @@ void Value::set_int(int val)
   num_value_.int_value_ = val;
   length_               = sizeof(val);
 }
+
+//*********************set_date**************************
+void Value::set_date(int val)
+{
+  attr_type_            = DATES;
+  num_value_.date_value_ = val;
+  length_               = sizeof(val);
+}
+//*******************************************************
 
 void Value::set_float(float val)
 {
@@ -203,6 +229,9 @@ int Value::get_int() const
     case INTS: {
       return num_value_.int_value_;
     }
+    case DATES: {
+      return num_value_.date_value_;
+    }
     case FLOATS: {
       return (int)(num_value_.float_value_);
     }
@@ -216,6 +245,12 @@ int Value::get_int() const
   }
   return 0;
 }
+
+//**********************get_date******************************
+int Value::get_date() const{
+  return get_int();
+}
+//************************************************************
 
 float Value::get_float() const
 {
@@ -285,3 +320,55 @@ bool Value::get_boolean() const
   }
   return false;
 }
+
+
+//**********************************************************
+//-------------------------辅助函数--------------------------
+int Value::date_to_sec(int year,int month,int day)
+  {
+    struct tm timeinfo = {0};
+    timeinfo.tm_year = year - 1900; // 年份从1900年开始
+    timeinfo.tm_mon = month - 1;    // 月份从0开始
+    timeinfo.tm_mday = day;
+    // 将tm结构体转换为从1970年1月1日午夜以来的秒数
+    return mktime(&timeinfo);
+  }
+
+std::string Value::sec_to_datestr(int val)
+  {
+     // 计算时间
+    std::time_t time_val = val;
+    std::tm* timeinfo = std::localtime(&time_val);
+    // 使用stringstream格式化输出
+    std::stringstream formatted_date;
+    formatted_date << std::setw(4) << std::setfill('0') << (timeinfo->tm_year + 1900) << "-";
+    formatted_date << std::setw(2) << std::setfill('0') << (timeinfo->tm_mon + 1) << "-";
+    formatted_date << std::setw(2) << std::setfill('0') << timeinfo->tm_mday;
+    return formatted_date.str();
+  }
+
+bool Value::isValidDate(int year,int month,int day)
+{
+   // 检查年份范围
+    if (year < 1970 || year > 2038) return false; 
+    if (year == 2038 && month > 2) return false; 
+    // 检查月份范围
+    if (month < 1 || month > 12) return false;  
+    // 检查日期范围
+    if (day < 1 || day > 31) return false; 
+    // 检查2月份的天数（闰年）
+    if (month == 2) {
+        if ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0)) {
+            return day <= 29;
+        } else {
+            return day <= 28;
+        }
+    }
+    // 检查30天的月份
+    if (month == 4 || month == 6 || month == 9 || month == 11) {
+        return day <= 30;
+    }
+    return true;
+}
+//----------------------------------------------------------
+//**********************************************************

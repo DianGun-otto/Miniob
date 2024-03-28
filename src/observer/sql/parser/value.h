@@ -26,7 +26,7 @@ enum AttrType
   CHARS,     ///< 字符串类型
   INTS,      ///< 整数类型(4字节)
   FLOATS,    ///< 浮点数类型(4字节)
-  
+
 //******************************
   DATES,     ///< 整数类型(4字节)
 //******************************
@@ -86,7 +86,7 @@ public:
 
 //**********************************************************
 //-------------------------辅助函数--------------------------
-  int datestr_to_sec(const char str);
+  int date_to_sec(int year,int month,int day);
   std::string sec_to_datestr(int val);
   bool  isValidDate(int year,int month,int day);
 //----------------------------------------------------------
@@ -102,9 +102,9 @@ public:
   std::string get_string() const;
   bool        get_boolean() const;
 
-//**********************************************************
+//**********************get_date******************************
   int         get_date() const;
-//**********************************************************
+//************************************************************
 private:
   AttrType attr_type_ = UNDEFINED;
   int      length_    = 0;
@@ -112,13 +112,12 @@ private:
   union
   {
     int   int_value_;
+     //**************date_value*******************
+    int   date_value_;
+    //*******************************************
     float float_value_;
     bool  bool_value_;
-
-    //***********************************
-    int   date_value_;
-    //***********************************
-
+    
   } num_value_;
   std::string str_value_;
 };

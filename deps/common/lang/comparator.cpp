@@ -30,6 +30,11 @@ int compare_int(void *arg1, void *arg2)
     return 0;
   }
 }
+//************************date比较*******************************
+int compare_date(void *arg1, void *arg2){
+  return compare_int(arg1,arg2);
+}
+//***************************************************************
 
 int compare_float(void *arg1, void *arg2)
 {
