@@ -72,6 +72,10 @@ void Value::set_data(char *data, int length)
       num_value_.int_value_ = *(int *)data;
       length_               = length;
     } break;
+    case DATES: {
+      num_value_.date_value_ = *(int *)data;
+      length_               = length;
+    } break;
     case FLOATS: {
       num_value_.float_value_ = *(float *)data;
       length_                 = length;
@@ -165,6 +169,10 @@ std::string Value::to_string() const
     case INTS: {
       os << num_value_.int_value_;
     } break;
+     case DATES: {
+      std::string str=sec_to_datestr(num_value_.date_value_);
+      os << str;
+    } break;
     case FLOATS: {
       os << common::double_to_str(num_value_.float_value_);
     } break;
@@ -187,6 +195,9 @@ int Value::compare(const Value &other) const
     switch (this->attr_type_) {
       case INTS: {
         return common::compare_int((void *)&this->num_value_.int_value_, (void *)&other.num_value_.int_value_);
+      } break;
+      case DATES: {
+        return common::compare_date((void *)&this->num_value_.int_value_, (void *)&other.num_value_.int_value_);
       } break;
       case FLOATS: {
         return common::compare_float((void *)&this->num_value_.float_value_, (void *)&other.num_value_.float_value_);
@@ -266,6 +277,9 @@ float Value::get_float() const
     case INTS: {
       return float(num_value_.int_value_);
     } break;
+    case DATES: {
+      return float(num_value_.date_value_);
+    } break;
     case FLOATS: {
       return num_value_.float_value_;
     } break;
@@ -306,6 +320,9 @@ bool Value::get_boolean() const
     case INTS: {
       return num_value_.int_value_ != 0;
     } break;
+    case DATES: {
+      return num_value_.date_value_ != 0;
+    } break;
     case FLOATS: {
       float val = num_value_.float_value_;
       return val >= EPSILON || val <= -EPSILON;
@@ -334,7 +351,7 @@ int Value::date_to_sec(int year,int month,int day)
     return mktime(&timeinfo);
   }
 
-std::string Value::sec_to_datestr(int val)
+std::string Value::sec_to_datestr(int val)const
   {
      // 计算时间
     std::time_t time_val = val;

@@ -87,7 +87,7 @@ public:
 //**********************************************************
 //-------------------------辅助函数--------------------------
   int date_to_sec(int year,int month,int day);
-  std::string sec_to_datestr(int val);
+  std::string sec_to_datestr(int val)const;
   bool  isValidDate(int year,int month,int day);
 //----------------------------------------------------------
 //**********************************************************
@@ -117,7 +117,7 @@ private:
     //*******************************************
     float float_value_;
     bool  bool_value_;
-    
+
   } num_value_;
   std::string str_value_;
 };
