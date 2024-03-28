@@ -57,7 +57,7 @@ Value::Value(const char *s, int len , int flag){
     throw std::string("invalid date");
     return;
   }
-  int val=date_to_sec(year,month,day);
+  int val=date_to_days(year,month,day);
   set_date(val);
 }
 //*******************************************************************
@@ -173,7 +173,7 @@ std::string Value::to_string() const
       os << num_value_.int_value_;
     } break;
      case DATES: {
-      std::string str=sec_to_datestr(num_value_.date_value_);
+      std::string str=days_to_datestr(num_value_.date_value_);
       os << str;
     } break;
     case FLOATS: {
@@ -344,34 +344,55 @@ bool Value::get_boolean() const
 
 //**********************************************************
 //-------------------------辅助函数--------------------------
-int Value::date_to_sec(int year,int month,int day)
+int Value::date_to_days(int year,int month,int day)
   {
-    struct tm timeinfo = {0};
-    timeinfo.tm_year = year - 1900; // 年份从1900年开始
-    timeinfo.tm_mon = month - 1;    // 月份从0开始
-    timeinfo.tm_mday = day;
-    // 将tm结构体转换为从1970年1月1日午夜以来的秒数
-    return mktime(&timeinfo);
+   int days = 0;
+    // 计算年份之间的天数差
+    for (int y = 1900; y < year; ++y) {
+        days += is_leap_year(y) ? 366 : 365;
+    }
+    // 计算给定年份中月份之前的天数
+    for (int m = 1; m < month; ++m) {
+        days += days_in_month(year, m);
+    }
+    // 加上给定月份的天数
+    days += day - 1;
+    return days;
   }
 
-std::string Value::sec_to_datestr(int val)const
-  {
-     // 计算时间
-    std::time_t time_val = val;
-    std::tm* timeinfo = std::localtime(&time_val);
-    // 使用stringstream格式化输出
-    std::stringstream formatted_date;
-    formatted_date << std::setw(4) << std::setfill('0') << (timeinfo->tm_year + 1900) << "-";
-    formatted_date << std::setw(2) << std::setfill('0') << (timeinfo->tm_mon + 1) << "-";
-    formatted_date << std::setw(2) << std::setfill('0') << timeinfo->tm_mday;
-    return formatted_date.str();
+int Value::is_leap_year(int year)const
+{
+    return ((year % 4 == 0 && year % 100 != 0) || (year % 400 == 0));
+}
+
+int Value::days_in_month(int year, int month)const
+{
+    int days[] = {31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+    if (month == 2 && is_leap_year(year)) {
+        return 29;
+    }
+    return days[month - 1];
+}
+
+std::string Value::days_to_datestr(int val)const
+{
+  int year = 1900;
+  while (val >= 365) {
+    val -= (is_leap_year(year) ? 366 : 365);
+    year++;
   }
+  int month = 1;
+  while (val >= days_in_month(year, month)) {
+      val -= days_in_month(year, month);
+      month++;
+  }
+    std::ostringstream oss;
+    oss << year << "-" << std::setw(2) << std::setfill('0') << month << "-" << std::setw(2) << std::setfill('0') << val + 1;
+    return oss.str();
+}
 
 bool Value::isValidDate(int year,int month,int day)
 {
-   // 检查年份范围
-    if (year < 1970 || year > 2038) return false; 
-    if (year == 2038 && month > 2) return false; 
     // 检查月份范围
     if (month < 1 || month > 12) return false;  
     // 检查日期范围

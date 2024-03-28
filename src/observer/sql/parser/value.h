@@ -86,8 +86,10 @@ public:
 
 //**********************************************************
 //-------------------------辅助函数--------------------------
-  int date_to_sec(int year,int month,int day);
-  std::string sec_to_datestr(int val)const;
+  int date_to_days(int year,int month,int day);
+  int is_leap_year(int year)const;
+  int days_in_month(int year, int month)const;
+  std::string days_to_datestr(int val)const;
   bool  isValidDate(int year,int month,int day);
 //----------------------------------------------------------
 //**********************************************************
