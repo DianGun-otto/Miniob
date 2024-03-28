@@ -26,6 +26,11 @@ enum AttrType
   CHARS,     ///< 字符串类型
   INTS,      ///< 整数类型(4字节)
   FLOATS,    ///< 浮点数类型(4字节)
+  
+//******************************
+  DATES,     ///< 整数类型(4字节)
+//******************************
+
   BOOLEANS,  ///< boolean类型，当前不是由parser解析出来的，是程序内部使用的
 };
 
@@ -48,6 +53,10 @@ public:
   explicit Value(bool val);
   explicit Value(const char *s, int len = 0);
 
+  //**********************************************************
+  explicit Value(const char *s, int len , int flag);
+  //**********************************************************
+
   Value(const Value &other)            = default;
   Value &operator=(const Value &other) = default;
 
@@ -57,6 +66,11 @@ public:
   void set_int(int val);
   void set_float(float val);
   void set_boolean(bool val);
+
+  //**********************************************************
+  void set_date(int val);
+  //**********************************************************
+
   void set_string(const char *s, int len = 0);
   void set_value(const Value &value);
 
@@ -69,6 +83,15 @@ public:
 
   AttrType attr_type() const { return attr_type_; }
 
+
+//**********************************************************
+//-------------------------辅助函数--------------------------
+  int datestr_to_sec(const char str);
+  std::string sec_to_datestr(int val);
+  bool  isValidDate(int year,int month,int day);
+//----------------------------------------------------------
+//**********************************************************
+
 public:
   /**
    * 获取对应的值
@@ -79,6 +102,9 @@ public:
   std::string get_string() const;
   bool        get_boolean() const;
 
+//**********************************************************
+  int         get_date() const;
+//**********************************************************
 private:
   AttrType attr_type_ = UNDEFINED;
   int      length_    = 0;
@@ -88,6 +114,11 @@ private:
     int   int_value_;
     float float_value_;
     bool  bool_value_;
+
+    //***********************************
+    int   date_value_;
+    //***********************************
+
   } num_value_;
   std::string str_value_;
 };
