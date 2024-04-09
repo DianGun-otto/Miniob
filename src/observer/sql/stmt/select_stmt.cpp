@@ -119,6 +119,8 @@ RC SelectStmt::create(Db *db, const SelectSqlNode &select_sql, Stmt *&stmt)
         return RC::SCHEMA_FIELD_MISSING;
       }
 
+      const AggrOp aggregation_ = relation_attr.aggregation;
+      
       query_fields.push_back(Field(table, field_meta));
     }
   }
