@@ -6,7 +6,10 @@
 #include "sql/expr/expression.h"
 #include "sql/operator/logical_operator.h"
 #include "storage/field/field.h"
-
+/**
+ * @brief 聚合逻辑算子
+ * @ingroup LogicalOperator
+ */
 class AggregateLogicalOperator: public LogicalOperator{
     public:
     AggregateLogicalOperator(const std::vector<Field> &field);  
