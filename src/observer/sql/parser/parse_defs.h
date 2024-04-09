@@ -27,6 +27,16 @@ class Expression;
  */
 
 /**
+ * @brief 聚合运算符
+ * @ingroup SQLParser
+ */
+enum AggrOp
+{
+  AGGR_SUM,    ///< sum
+  AGGR_NONE    ///< no aggr
+};
+
+/**
  * @brief 描述一个属性
  * @ingroup SQLParser
  * @details 属性，或者说字段(column, field)
@@ -55,15 +65,6 @@ enum CompOp
   NO_OP
 };
 
-/**
- * @brief 聚合运算符
- * @ingroup SQLParser
- */
-enum AggrOp
-{
-  AGGR_SUM,    ///< sum
-  AGGR_NONE    ///< no aggr
-};
 
 /**
  * @brief 表示一个条件比较
