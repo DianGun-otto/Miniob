@@ -81,6 +81,11 @@ RC PhysicalPlanGenerator::create(LogicalOperator &logical_operator, unique_ptr<P
   return rc;
 }
 
+RC PhysicalPlanGenerator::create_plan(AggregateLogicalOperator &aggregate_oper, unique_ptr<PhysicalOperator> &oper)
+{
+  vector<unique_ptr<LogicalOperator>> &Children_opers = aggregate_oper.children();
+}
+
 RC PhysicalPlanGenerator::create_plan(TableGetLogicalOperator &table_get_oper, unique_ptr<PhysicalOperator> &oper)
 {
   vector<unique_ptr<Expression>> &predicates = table_get_oper.predicates();
