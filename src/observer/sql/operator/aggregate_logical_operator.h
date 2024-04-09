@@ -22,5 +22,5 @@ class AggregateLogicalOperator: public LogicalOperator{
 
     private:
     std::vector<Field> fields_;
-    
+
 }
