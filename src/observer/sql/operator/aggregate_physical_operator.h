@@ -8,8 +8,8 @@
  * @brief 聚合物理算子
  * @ingroup PhysicalOperator 
 **/
-
-class AggregatePhysicalOperator : public PhysicalOperator{
+class AggregatePhysicalOperator : public PhysicalOperator
+{
 public:
     AggregatePhysicalOperator(){}
 

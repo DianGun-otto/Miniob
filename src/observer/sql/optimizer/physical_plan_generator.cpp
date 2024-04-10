@@ -93,7 +93,7 @@ RC PhysicalPlanGenerator::create_plan(AggregateLogicalOperator &aggregate_oper, 
 {
   vector<unique_ptr<LogicalOperator>> &children_opers = aggregate_oper.children();
   ASSERT(children_opers.size() == 1, "aggregate logical operator's sub oper number should be 1");
-
+  
   LogicalOperator &child_oper = *children_opers.front();
 
   unique_ptr<PhysicalOperator> child_phy_oper;
@@ -193,7 +193,7 @@ RC PhysicalPlanGenerator::create_plan(PredicateLogicalOperator &pred_oper, uniqu
 {
   vector<unique_ptr<LogicalOperator>> &children_opers = pred_oper.children();
   ASSERT(children_opers.size() == 1, "predicate logical operator's sub oper number should be 1");
-
+  
   LogicalOperator &child_oper = *children_opers.front();
 
   unique_ptr<PhysicalOperator> child_phy_oper;

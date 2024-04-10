@@ -25,12 +25,11 @@ RC AggregatePhysicalOperator::next()
     if (result_tuple_.cell_num() > 0){
         return RC::RECORD_EOF;
     }
-
+  
     RC rc = RC::SUCCESS;
     PhysicalOperator *oper = children_[0].get();
-
+  
     std::vector<Value> result_cells;
-    
     while (RC::SUCCESS == (rc = oper->next())) {
         //get tuple
         Tuple *tuple = oper->current_tuple();
@@ -38,7 +37,7 @@ RC AggregatePhysicalOperator::next()
         //do aggregate
         for (int cell_idx = 0; cell_idx < (int)aggregations_.size(); cell_idx++) {
             const AggrOp aggregation = aggregations_[cell_idx];
-    
+
             Value cell;
             AttrType attr_type = AttrType::INTS;
             switch (aggregation)
@@ -47,10 +46,11 @@ RC AggregatePhysicalOperator::next()
                 rc = tuple->cell_at(cell_idx, cell);
                 attr_type = cell.attr_type();
                 if(attr_type == AttrType::INTS or attr_type == AttrType::FLOATS) {
-                    if(cell_idx == 0)
-                    result_cells.push_back(cell);
-                    else
-                    result_cells[0].set_float(result_cells[0].get_float() + cell.get_float());
+                  if (result_cells.size() > cell_idx) {
+                    result_cells[cell_idx].set_float(result_cells[cell_idx].get_float() + cell.get_float());
+                  } else {
+                      result_cells.push_back(cell); // 如果结果向量还不包含足够的元素，则添加新元素
+                  }
                 }
                 break;
             default:
@@ -62,7 +62,7 @@ RC AggregatePhysicalOperator::next()
         rc = RC::SUCCESS;
     }
 
-    result_tuple_.set_cells(result_cells);
+    result_tuple_.set_cells(result_cells);//最终输出的一条元组
 
     return rc;
 }
@@ -85,7 +85,7 @@ void AggregatePhysicalOperator::add_aggregation(const AggrOp aggregation){
 //******************************current_tuple****************************
 Tuple *AggregatePhysicalOperator::current_tuple()
 {
-    return &result_tuple_;
+    return nullptr;
 }
 //***********************************************************************
 
