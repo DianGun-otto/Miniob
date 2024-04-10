@@ -16,8 +16,6 @@ RC AggregatePhysicalOperator::open(Trx *trx)
     return rc;
   }
 
-  trx_ = trx;
-
   return RC::SUCCESS;
 }
 
