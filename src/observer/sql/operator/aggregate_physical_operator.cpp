@@ -46,10 +46,10 @@ RC AggregatePhysicalOperator::next()
                 rc = tuple->cell_at(cell_idx, cell);
                 attr_type = cell.attr_type();
                 if(attr_type == AttrType::INTS or attr_type == AttrType::FLOATS) {
-                  if (result_cells.size() > cell_idx) {
-                    result_cells[cell_idx].set_float(result_cells[cell_idx].get_float() + cell.get_float());
-                  } else {
-                      result_cells.push_back(cell); // 如果结果向量还不包含足够的元素，则添加新元素
+                  if(result_cells.empty()){
+                    result_cells.push_back(cell);
+                  }else{
+                    result_cells[0].set_float(result_cells[0].get_float() + cell.get_float());
                   }
                 }
                 break;
