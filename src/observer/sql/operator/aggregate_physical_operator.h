@@ -30,4 +30,4 @@ public:
 private:
     std::vector<AggrOp> aggregations_;
     ValueListTuple result_tuple_;
-}   ;
+};
