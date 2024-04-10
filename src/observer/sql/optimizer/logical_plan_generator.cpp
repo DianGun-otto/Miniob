@@ -15,6 +15,7 @@ See the Mulan PSL v2 for more details. */
 #include "sql/optimizer/logical_plan_generator.h"
 
 #include <common/log/log.h>
+
 #include "sql/operator/aggregate_logical_operator.h"
 #include "sql/operator/calc_logical_operator.h"
 #include "sql/operator/delete_logical_operator.h"
@@ -136,9 +137,9 @@ RC LogicalPlanGenerator::create_plan(SelectStmt *select_stmt, unique_ptr<Logical
   }
 
   if(aggr_flag){
-    unique_ptr<LogicalOperator> aggregate_oper(new AggregateLogicalOperator(all_fields));
-    aggregate_oper->add_child(std::move(project_oper));
-    logical_operator.swap(aggregate_oper);
+  unique_ptr<LogicalOperator> aggregate_oper(new AggregateLogicalOperator(all_fields));
+  aggregate_oper->add_child(std::move(project_oper));
+  logical_operator.swap(aggregate_oper);
   }else{
     logical_operator.swap(project_oper);
   }
