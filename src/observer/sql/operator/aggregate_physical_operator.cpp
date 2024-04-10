@@ -30,6 +30,7 @@ RC AggregatePhysicalOperator::next()
     PhysicalOperator *oper = children_[0].get();
 
     std::vector<Value> result_cells;
+    
     while (RC::SUCCESS == (rc = oper->next())) {
         //get tuple
         Tuple *tuple = oper->current_tuple();
@@ -37,7 +38,7 @@ RC AggregatePhysicalOperator::next()
         //do aggregate
         for (int cell_idx = 0; cell_idx < (int)aggregations_.size(); cell_idx++) {
             const AggrOp aggregation = aggregations_[cell_idx];
-
+    
             Value cell;
             AttrType attr_type = AttrType::INTS;
             switch (aggregation)
@@ -46,6 +47,7 @@ RC AggregatePhysicalOperator::next()
                 rc = tuple->cell_at(cell_idx, cell);
                 attr_type = cell.attr_type();
                 if(attr_type == AttrType::INTS or attr_type == AttrType::FLOATS) {
+                    result_cells.at(cell_idx)=new Value();
                     result_cells[cell_idx].set_float(result_cells[cell_idx].get_float() + cell.get_float());
                 }
                 break;
@@ -72,7 +74,6 @@ RC AggregatePhysicalOperator::close()
 }
 
 //****************************add_aggregation****************************
-//***********************************************************************
 void AggregatePhysicalOperator::add_aggregation(const AggrOp aggregation){
     aggregations_.push_back(aggregation);
 }
@@ -80,9 +81,9 @@ void AggregatePhysicalOperator::add_aggregation(const AggrOp aggregation){
 
 
 //******************************current_tuple****************************
-//***********************************************************************
 Tuple *AggregatePhysicalOperator::current_tuple()
 {
     return &result_tuple_;
 }
 //***********************************************************************
+
