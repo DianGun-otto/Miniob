@@ -11,7 +11,8 @@
  * @brief 聚合逻辑算子
  * @ingroup LogicalOperator
  */
-class AggregateLogicalOperator: public LogicalOperator{
+class AggregateLogicalOperator: public LogicalOperator
+{
     public:
     AggregateLogicalOperator(const std::vector<Field> &field);  
     virtual ~AggregateLogicalOperator() = default;
@@ -27,4 +28,4 @@ class AggregateLogicalOperator: public LogicalOperator{
     private:
     std::vector<Field> fields_;
 
-}
+};

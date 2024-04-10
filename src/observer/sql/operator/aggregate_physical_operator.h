@@ -18,7 +18,7 @@ public:
     void add_aggregation(const AggrOp aggregation);
 
     PhysicalOperatorType type() const override{
-        return PhysicalOperatorType::AGGREGATE
+        return PhysicalOperatorType::AGGREGATE;
     }
 
     RC open(Trx *trx) override;
@@ -30,4 +30,4 @@ public:
 private:
     std::vector<AggrOp> aggregations_;
     ValueListTuple result_tuple_;
-}
+};
