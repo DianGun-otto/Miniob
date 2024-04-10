@@ -121,7 +121,7 @@ RC SelectStmt::create(Db *db, const SelectSqlNode &select_sql, Stmt *&stmt)
 
       const AggrOp aggregation_ = relation_attr.aggregation;
       
-      query_fields.push_back(Field(table, field_meta));
+      query_fields.push_back(Field(table, field_meta, aggregation_));
     }
   }
 
