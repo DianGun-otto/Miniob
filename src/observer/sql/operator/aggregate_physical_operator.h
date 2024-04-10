@@ -16,7 +16,7 @@ public:
     virtual ~AggregatePhysicalOperator() = default;
 
     void add_aggregation(const AggrOp aggregation);
-
+    
     PhysicalOperatorType type() const override{
         return PhysicalOperatorType::AGGREGATE;
     }
