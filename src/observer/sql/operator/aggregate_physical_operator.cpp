@@ -47,7 +47,7 @@ RC AggregatePhysicalOperator::next()
                 rc = tuple->cell_at(cell_idx, cell);
                 attr_type = cell.attr_type();
                 if(attr_type == AttrType::INTS or attr_type == AttrType::FLOATS) {
-                    result_cells.at(cell_idx)=new Value();
+                    result_cells.at(cell_idx)=new Value(0.0);
                     result_cells[cell_idx].set_float(result_cells[cell_idx].get_float() + cell.get_float());
                 }
                 break;
