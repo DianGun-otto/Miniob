@@ -25,7 +25,7 @@ RC AggregatePhysicalOperator::next()
     if (result_tuple_.cell_num() > 0){
         return RC::RECORD_EOF;
     }
-  
+
     RC rc = RC::SUCCESS;
     PhysicalOperator *oper = children_[0].get();
   
@@ -61,7 +61,6 @@ RC AggregatePhysicalOperator::next()
     if (rc == RC::RECORD_EOF){
         rc = RC::SUCCESS;
     }
-
     result_tuple_.set_cells(result_cells);//最终输出的一条元组
 
     return rc;
@@ -85,7 +84,7 @@ void AggregatePhysicalOperator::add_aggregation(const AggrOp aggregation){
 //******************************current_tuple****************************
 Tuple *AggregatePhysicalOperator::current_tuple()
 {
-    return nullptr;
+    return &result_tuple_;
 }
 //***********************************************************************
 
