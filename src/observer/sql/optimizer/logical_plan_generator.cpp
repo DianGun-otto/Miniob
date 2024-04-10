@@ -15,7 +15,7 @@ See the Mulan PSL v2 for more details. */
 #include "sql/optimizer/logical_plan_generator.h"
 
 #include <common/log/log.h>
-
+#include "sql/operator/aggregate_logical_operator.h"
 #include "sql/operator/calc_logical_operator.h"
 #include "sql/operator/delete_logical_operator.h"
 #include "sql/operator/explain_logical_operator.h"
