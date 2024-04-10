@@ -128,7 +128,7 @@ RC LogicalPlanGenerator::create_plan(SelectStmt *select_stmt, unique_ptr<Logical
   }
 
   bool aggr_flag = false;
-  for(auto field::all_fields){
+  for(auto field:all_fields){
     if(field.aggregation() != AggrOp::AGGR_NONE){
       aggr_flag = true;
       break;
