@@ -109,7 +109,7 @@ RC PhysicalPlanGenerator::create_plan(AggregateLogicalOperator &aggregate_oper, 
   for (const Field &field : aggregate_fields) {
     aggregate_operator->add_aggregation(field.aggregation());
   }
-
+  
   if (child_phy_oper) {
     aggregate_operator->add_child(std::move(child_phy_oper));
   }
