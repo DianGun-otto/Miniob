@@ -117,7 +117,7 @@ RC AggregatePhysicalOperator::next()
           result_cells[cell_idx].set_float(new_float);
         }
 
-        if(aggregation == AggrOp::AGGR_COUNT){
+        if(aggregation == AggrOp::AGGR_COUNT || aggregation == AggrOp::AGGR_COUNT_ALL){
           result_cells[cell_idx].set_float((float)tuple_num);
         }
       }   
