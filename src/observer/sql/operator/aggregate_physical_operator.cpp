@@ -30,7 +30,7 @@ RC AggregatePhysicalOperator::next()
     PhysicalOperator *oper = children_[0].get();
     
     std::vector<Value> result_cells;
-    int tuple_num=0;
+    int tuple_num = 0;//tuple数量
     while (RC::SUCCESS == (rc = oper->next())) {
         //get tuple
         Tuple *tuple = oper->current_tuple();
@@ -62,7 +62,6 @@ RC AggregatePhysicalOperator::next()
                 if(attr_type == AttrType::INTS or attr_type == AttrType::FLOATS) {
                   if(static_cast<int>(result_cells.size())!=(int)aggregations_.size()){
                     result_cells.push_back(cell);
-
                   }else{
                     result_cells[cell_idx].set_float(result_cells[cell_idx].get_float() + cell.get_float());
                   }
@@ -77,21 +76,30 @@ RC AggregatePhysicalOperator::next()
                 break;
             //count
             case AggrOp::AGGR_COUNT:
-            
+                rc = tuple->cell_at(cell_idx, cell);
+                if(static_cast<int>(result_cells.size())!=(int)aggregations_.size()){
+                  result_cells.push_back(cell);
+              }
                 break;
             default:
                 return RC::UNIMPLENMENT;
             }
         }
     }
+  
     for (int cell_idx = 0; cell_idx < (int)aggregations_.size(); cell_idx++) {
         const AggrOp aggregation = aggregations_[cell_idx];
-        if(aggregation == AGGR_AVG){
+
+        if(aggregation == AggrOp::AGGR_AVG){
           float new_float=result_cells[cell_idx].get_float()/tuple_num;
           result_cells[cell_idx].set_float(new_float);
-        }    
-    }
+        }
 
+        if(aggregation == AggrOp::AGGR_COUNT){
+          result_cells[cell_idx].set_float((float)tuple_num);
+        }
+      }   
+    
     if (rc == RC::RECORD_EOF){
         rc = RC::SUCCESS;
     }
