@@ -136,7 +136,7 @@ void Value::set_value(const Value &value)
       set_int(value.get_int());
     } break;
     case DATES: {
-      set_int(value.get_date());
+      set_date(value.get_date());
     } break;
     case FLOATS: {
       set_float(value.get_float());
