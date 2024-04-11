@@ -46,10 +46,10 @@ RC AggregatePhysicalOperator::next()
                 rc = tuple->cell_at(cell_idx, cell);
                 attr_type = cell.attr_type();
                 if(attr_type == AttrType::INTS or attr_type == AttrType::FLOATS) {
-                  if(result_cells.empty()){
+                  if(static_cast<int>(result_cells.size())!=(int)aggregations_.size()){
                     result_cells.push_back(cell);
                   }else{
-                    result_cells[0].set_float(result_cells[0].get_float() + cell.get_float());
+                    result_cells[cell_idx].set_float(result_cells[cell_idx].get_float() + cell.get_float());
                   }
                 }
                 break;
