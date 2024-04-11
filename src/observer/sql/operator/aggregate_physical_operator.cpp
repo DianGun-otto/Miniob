@@ -44,7 +44,7 @@ RC AggregatePhysicalOperator::next()
 
             switch (aggregation){
             //sum or avg
-            case AggrOp::AGGR_SUM || AggrOp::AGGR_AVG :
+            case AggrOp::AGGR_SUM:
                 rc = tuple->cell_at(cell_idx, cell);
                 attr_type = cell.attr_type();
                 if(attr_type == AttrType::INTS or attr_type == AttrType::FLOATS) {
@@ -55,18 +55,18 @@ RC AggregatePhysicalOperator::next()
                   }
                 }
                 break;
-            // //avg
-            // case AggrOp::AGGR_AVG:
-            //     rc = tuple->cell_at(cell_idx, cell);
-            //     attr_type = cell.attr_type();
-            //     if(attr_type == AttrType::INTS or attr_type == AttrType::FLOATS) {
-            //       if(static_cast<int>(result_cells.size())!=(int)aggregations_.size()){
-            //         result_cells.push_back(cell);
-            //       }else{
-            //         result_cells[cell_idx].set_float(result_cells[cell_idx].get_float() + cell.get_float());
-            //       }
-            //     }
-            //     break;
+            //avg
+            case AggrOp::AGGR_AVG:
+                rc = tuple->cell_at(cell_idx, cell);
+                attr_type = cell.attr_type();
+                if(attr_type == AttrType::INTS or attr_type == AttrType::FLOATS) {
+                  if(static_cast<int>(result_cells.size())!=(int)aggregations_.size()){
+                    result_cells.push_back(cell);
+                  }else{
+                    result_cells[cell_idx].set_float(result_cells[cell_idx].get_float() + cell.get_float());
+                  }
+                }
+                break;
             //max
             case AggrOp::AGGR_MAX:
                 rc = tuple->cell_at(cell_idx, cell);
