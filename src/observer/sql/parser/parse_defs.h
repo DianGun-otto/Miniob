@@ -32,12 +32,13 @@ class Expression;
  */
 enum AggrOp
 {
-  AGGR_SUM,    ///< sum
-  AGGR_AVG,    ///< avg
-  AGGR_MAX,    ///< max
-  AGGR_MIN,    ///< min
-  AGGR_COUNT,  ///< count
-  AGGR_NONE    ///< no aggr
+  AGGR_SUM,       ///< sum
+  AGGR_AVG,       ///< avg
+  AGGR_MAX,       ///< max
+  AGGR_MIN,       ///< min
+  AGGR_COUNT,     ///< count
+  AGGR_COUNT_ALL, ///< count(*)
+  AGGR_NONE       ///< no aggr
 };
 
 /**
