@@ -28,7 +28,7 @@ RC AggregatePhysicalOperator::next()
 
     RC rc = RC::SUCCESS;
     PhysicalOperator *oper = children_[0].get();
-  
+    
     std::vector<Value> result_cells;
     while (RC::SUCCESS == (rc = oper->next())) {
         //get tuple
@@ -37,11 +37,12 @@ RC AggregatePhysicalOperator::next()
         //do aggregate
         for (int cell_idx = 0; cell_idx < (int)aggregations_.size(); cell_idx++) {
             const AggrOp aggregation = aggregations_[cell_idx];
-
+            
             Value cell;
             AttrType attr_type = AttrType::INTS;
-            switch (aggregation)
-            {
+
+            switch (aggregation){
+            //sum
             case AggrOp::AGGR_SUM:
                 rc = tuple->cell_at(cell_idx, cell);
                 attr_type = cell.attr_type();
@@ -52,6 +53,31 @@ RC AggregatePhysicalOperator::next()
                     result_cells[cell_idx].set_float(result_cells[cell_idx].get_float() + cell.get_float());
                   }
                 }
+                break;
+            //avg
+            case AggrOp::AGGR_AVG:
+                rc = tuple->cell_at(cell_idx, cell);
+                attr_type = cell.attr_type();
+                if(attr_type == AttrType::INTS or attr_type == AttrType::FLOATS) {
+                  cell.set_float(cell.get_float()/(int)aggregations_.size());
+                  if(static_cast<int>(result_cells.size())!=(int)aggregations_.size()){
+                    result_cells.push_back(cell);
+
+                  }else{
+                    result_cells[cell_idx].set_float(result_cells[cell_idx].get_float() + cell.get_float());
+                  }
+                }
+                break;
+            //max
+            case AggrOp::AGGR_MAX:
+                break;
+            //min
+            case AggrOp::AGGR_MIN:
+            
+                break;
+            //count
+            case AggrOp::AGGR_COUNT:
+            
                 break;
             default:
                 return RC::UNIMPLENMENT;
