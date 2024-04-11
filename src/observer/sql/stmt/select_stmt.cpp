@@ -67,7 +67,14 @@ RC SelectStmt::create(Db *db, const SelectSqlNode &select_sql, Stmt *&stmt)
   std::vector<Field> query_fields;
   for (int i = static_cast<int>(select_sql.attributes.size()) - 1; i >= 0; i--) {
     const RelAttrSqlNode &relation_attr = select_sql.attributes[i];
+    const AggrOp aggregation_ = relation_attr.aggregation;
 
+    bool valid_=relation_attr.valid;
+    //聚合中出现多个属性或者空值的情况
+    if(!valid_){
+      return RC::INVALID_ARGUMENT;
+    }
+    
     if (common::is_blank(relation_attr.relation_name.c_str()) &&
         0 == strcmp(relation_attr.attribute_name.c_str(), "*")) {
       for (Table *table : tables) {
