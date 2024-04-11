@@ -534,7 +534,8 @@ rel_attr_aggr:
       $$->relation_name = "";
       $$->attribute_name = "*";
   }
-  | ID {
+  | 
+  ID {
     $$ = new RelAttrSqlNode;
     $$->attribute_name = $1;
     free($1);

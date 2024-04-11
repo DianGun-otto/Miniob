@@ -72,11 +72,11 @@ RC AggregatePhysicalOperator::next()
                 rc = tuple->cell_at(cell_idx, cell);
 
                 if(static_cast<int>(result_cells.size())!=(int)aggregations_.size()){
-                    result_cells.push_back(cell);
+                    result_cells.push_back(cell.get_string());
                 }else{
                   int flag = cell.compare(result_cells[cell_idx]);
                   if(flag == 1)//cell.value>result_cells[cell_idx].value
-                    result_cells[cell_idx].set_value(cell);
+                    result_cells[cell_idx].set_value(cell.get_string());
                   }
                 break;
             //min
@@ -87,7 +87,7 @@ RC AggregatePhysicalOperator::next()
                 }else{
                   int flag = cell.compare(result_cells[cell_idx]);
                   if(flag == -1)//cell.value < result_cells[cell_idx].value
-                    result_cells[cell_idx].set_value(cell);
+                    result_cells[cell_idx].set_value(cell.get_string());
                   }           
                 break;
             //count
@@ -116,7 +116,7 @@ RC AggregatePhysicalOperator::next()
           float new_float=result_cells[cell_idx].get_float()/tuple_num;
           result_cells[cell_idx].set_float(new_float);
         }
-
+        
         if(aggregation == AggrOp::AGGR_COUNT || aggregation == AggrOp::AGGR_COUNT_ALL){
           result_cells[cell_idx].set_float((float)tuple_num);
         }
