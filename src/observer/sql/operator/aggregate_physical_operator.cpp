@@ -91,7 +91,7 @@ RC AggregatePhysicalOperator::next()
                   }           
                 break;
             //count
-            case AggrOp::AGGR_COUNT_ALL:
+            case AggrOp::AGGR_COUNT:
                 rc = tuple->cell_at(cell_idx, cell);
                 if(static_cast<int>(result_cells.size())!=(int)aggregations_.size()){
                   result_cells.push_back(cell);
@@ -111,7 +111,7 @@ RC AggregatePhysicalOperator::next()
           result_cells[cell_idx].set_float(new_float);
         }
 
-        if(aggregation == AggrOp::AGGR_COUNT_ALL){
+        if(aggregation == AggrOp::AGGR_COUNT){
           result_cells[cell_idx].set_float((float)tuple_num);
         }
       }   

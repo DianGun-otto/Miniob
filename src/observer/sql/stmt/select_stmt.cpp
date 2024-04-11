@@ -87,7 +87,7 @@ RC SelectStmt::create(Db *db, const SelectSqlNode &select_sql, Stmt *&stmt)
       }
 
       for (Table *table : tables) {
-        wildcard_fields(table, query_fields);
+        wildcard_fields(table, query_fields, aggregation_);
       }
 
     } else if (!common::is_blank(relation_attr.relation_name.c_str())) {
@@ -114,7 +114,7 @@ RC SelectStmt::create(Db *db, const SelectSqlNode &select_sql, Stmt *&stmt)
           if(have_aggregation_ && aggregation_ != AggrOp::AGGR_COUNT){
             return RC::INVALID_ARGUMENT;
           }
-          wildcard_fields(table, query_fields);
+          wildcard_fields(table, query_fields, aggregation_);
         } else {
           const FieldMeta *field_meta = table->table_meta().field(field_name);
           if (nullptr == field_meta) {
