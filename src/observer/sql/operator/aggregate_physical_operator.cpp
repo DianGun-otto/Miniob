@@ -97,6 +97,12 @@ RC AggregatePhysicalOperator::next()
                   result_cells.push_back(cell);
               }
                 break;
+            case AggrOp::AGGR_COUNT_ALL:
+                rc = tuple->cell_at(cell_idx, cell);
+                if(static_cast<int>(result_cells.size())!=(int)aggregations_.size()){
+                  result_cells.push_back(cell);
+              }
+                break;
             default:
                 return RC::UNIMPLENMENT;
             }
