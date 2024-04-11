@@ -43,7 +43,7 @@ RC AggregatePhysicalOperator::next()
             AttrType attr_type = AttrType::INTS;
 
             switch (aggregation){
-            //sum or avg
+            //sum
             case AggrOp::AGGR_SUM:
                 rc = tuple->cell_at(cell_idx, cell);
                 attr_type = cell.attr_type();
@@ -77,22 +77,7 @@ RC AggregatePhysicalOperator::next()
                   int flag = cell.compare(&result_cells[cell_idx]);
                   if(flag == 1)//cell.value>result_cells[cell_idx].value
                     result_cells[cell_idx].set_value(&cell);
-                  // if(attr_type == AttrType::INTS or attr_type == AttrType::FLOATS) {
-                  //   float cell_float = cell.get_float();
-                  //   float result_cells_float = result_cells[cell_idx].get_float();
-                  //   if(cell_float > result_cells_float)
-                  //   result_cells[cell_idx].set_float(cell_float);
-                  // }
-                  // else if(attr_type == AttrType::DATES) {
-                  //   int cell_date = cell.get_date();
-                  //   int result_cells_date = result_cells[cell_idx].get_date();
-                  //   if(cell_date > result_cells_date)
-                  //   result_cells[cell_idx].set_date(cell_date);
-                  // }
-                  // else if(attr_type == AttrType::CHARS) {
-
-                  // }
-                }
+                  }
                 break;
             //min
             case AggrOp::AGGR_MIN:
@@ -103,11 +88,7 @@ RC AggregatePhysicalOperator::next()
                   int flag = cell.compare(&result_cells[cell_idx]);
                   if(flag == -1)//cell.value < result_cells[cell_idx].value
                     result_cells[cell_idx].set_value(&cell);
-                  // float cell_float = cell.get_float();
-                  // float result_cells_float = result_cells[cell_idx].get_float();
-                  // if(cell_float < result_cells_float)
-                  // result_cells[cell_idx].set_float(cell_float);
-                }           
+                  }           
                 break;
             //count
             case AggrOp::AGGR_COUNT:
