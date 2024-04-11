@@ -52,7 +52,7 @@ class TupleSchema
 {
 public:
   void append_cell(const TupleCellSpec &cell) { cells_.push_back(cell); }
-  void append_cell(const char *table, const *field, const AggrOp aggr = AggrOp::AGGR_NONE){append_cell(TupleCellSpec(table, field, nullptr, aggr));}
+  void append_cell(const char *table, const char *field, const AggrOp aggr = AggrOp::AGGR_NONE){append_cell(TupleCellSpec(table, field, nullptr, aggr));}
   void append_cell(const char *table, const char *field) { append_cell(TupleCellSpec(table, field)); }
   void append_cell(const char *alias, const AggrOp aggr = AggrOp::AGGR_NONE) { append_cell(TupleCellSpec(alias, aggr)); }
 

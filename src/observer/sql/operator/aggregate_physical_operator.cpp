@@ -74,9 +74,9 @@ RC AggregatePhysicalOperator::next()
                 if(static_cast<int>(result_cells.size())!=(int)aggregations_.size()){
                     result_cells.push_back(cell);
                 }else{
-                  int flag = cell.compare(&result_cells[cell_idx]);
+                  int flag = cell.compare(result_cells[cell_idx]);
                   if(flag == 1)//cell.value>result_cells[cell_idx].value
-                    result_cells[cell_idx].set_value(&cell);
+                    result_cells[cell_idx].set_value(cell);
                   }
                 break;
             //min
@@ -85,9 +85,9 @@ RC AggregatePhysicalOperator::next()
                 if(static_cast<int>(result_cells.size())!=(int)aggregations_.size()){
                     result_cells.push_back(cell);
                 }else{
-                  int flag = cell.compare(&result_cells[cell_idx]);
+                  int flag = cell.compare(result_cells[cell_idx]);
                   if(flag == -1)//cell.value < result_cells[cell_idx].value
-                    result_cells[cell_idx].set_value(&cell);
+                    result_cells[cell_idx].set_value(cell);
                   }           
                 break;
             //count
