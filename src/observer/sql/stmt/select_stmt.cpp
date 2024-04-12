@@ -70,22 +70,22 @@ RC SelectStmt::create(Db *db, const SelectSqlNode &select_sql, Stmt *&stmt)
   // collect query fields in `select` statement
   std::vector<Field> query_fields;
 
-  //判断是否存在如 `select id, count(age) from t;` 这样的聚合和单个字段混合的测试语句，如果有则返回FAILURE
   bool have_aggr_select = false;
-  for (int i = static_cast<int>(select_sql.attributes.size()) - 1; i >= 0; i--){
-    const RelAttrSqlNode &relation_attr = select_sql.attributes[i];
-    const AggrOp aggregation_ = relation_attr.aggregation;
-    if(have_aggr_select && aggregation_ == AggrOp::AGGR_NONE)
-    return RC::INVALID_ARGUMENT;
-    if(aggregation_ != AggrOp::AGGR_NONE)
-    have_aggr_select = true;//查询中出现了聚合操作
-  }
   
   for (int i = static_cast<int>(select_sql.attributes.size()) - 1; i >= 0; i--) {
     const RelAttrSqlNode &relation_attr = select_sql.attributes[i];
     const AggrOp aggregation_ = relation_attr.aggregation;
     bool have_aggregation_ = (aggregation_ != AggrOp::AGGR_NONE ? true : false);
     bool valid_=relation_attr.valid;
+
+    //判断是否存在如select id, count(age) from t这样的聚合和单个字段混合的测试语句，如果有则返回FAILURE
+    if(have_aggregation_){
+      have_aggr_select = true;
+    }
+    if(have_aggr_select && !have_aggregation_){
+      return RC::INVALID_ARGUMENT;
+    }
+
     //聚合中出现多个属性或者空值的情况
     if(!valid_){
       return RC::INVALID_ARGUMENT;
