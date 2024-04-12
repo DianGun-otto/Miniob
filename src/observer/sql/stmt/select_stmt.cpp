@@ -123,7 +123,7 @@ RC SelectStmt::create(Db *db, const SelectSqlNode &select_sql, Stmt *&stmt)
             return RC::SCHEMA_FIELD_MISSING;
           }
           
-          query_fields.push_back(Field(table, field_meta));
+          query_fields.push_back(Field(table, field_meta, aggregation_));
         }
       }
     } else {
