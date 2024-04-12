@@ -74,7 +74,7 @@ RC AggregatePhysicalOperator::next()
                     result_cells.push_back(cell);
                 }else{
                   int flag = cell.compare(result_cells[cell_idx]);
-                  if(flag == 1)//cell.value>result_cells[cell_idx].value
+                  if(flag > 0)//cell.value>result_cells[cell_idx].value
                     result_cells[cell_idx].set_value(cell);
                   }
                 break;
@@ -85,7 +85,7 @@ RC AggregatePhysicalOperator::next()
                     result_cells.push_back(cell);
                 }else{
                   int flag = cell.compare(result_cells[cell_idx]);
-                  if(flag == -1)//cell.value < result_cells[cell_idx].value
+                  if(flag < 0)//cell.value < result_cells[cell_idx].value
                     result_cells[cell_idx].set_value(cell);
                   }           
                 break;
