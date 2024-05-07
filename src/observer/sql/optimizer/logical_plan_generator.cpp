@@ -273,5 +273,5 @@ RC LogicalPlanGenerator::create_plan(UpdateStmt *update_stmt, unique_ptr<Logical
 
   logical_operator = std::move(update_oper);
 
-  rerurn rc;
+  return rc;
 }
