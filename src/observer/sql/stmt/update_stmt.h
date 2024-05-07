@@ -54,7 +54,7 @@ public:
   }
 
   FilterStmt *filter_stmt() const {
-    return filter_stmt;
+    return filter_stmt_;
   }
 
 private:
