@@ -118,7 +118,7 @@ MvccTrx::MvccTrx(MvccTrxKit &kit, int32_t trx_id) : trx_kit_(kit), trx_id_(trx_i
 
 MvccTrx::~MvccTrx() {}
 
-RC MvccTrx::delete_record(Table *table, Record &record)
+RC MvccTrx::update_record(Table *table, Record &record, int offset, int len, Value &value)
 {
   return RC::SUCCESS;
 }
