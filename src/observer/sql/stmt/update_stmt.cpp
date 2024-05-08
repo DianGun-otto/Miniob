@@ -53,7 +53,7 @@ RC UpdateStmt::create(Db *db, const UpdateSqlNode &update_sql, Stmt *&stmt)
     return RC::SCHEMA_FIELD_MISSING;
   }
 
-  const Field field(table, field_meta);
+  const Field field(table, field_meta, 0);
 
   // 过滤算子
   std::unordered_map<std::string, Table *> table_map;
