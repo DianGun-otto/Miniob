@@ -379,33 +379,16 @@ RC RecordFileHandler::init_free_pages()
 
 RC RecordFileHandler::update_record(RID *rid, int offset, int len, Value &value)
 {
-  RC rc = RC::Slyreadonly_ == false, "cannot insert into page while the page is readonly"U;
-  
-  if (rid->slot_num >= page_header_->record_capacity) {
-  
-  }{
-    LOG_ERROR("Invalid slot_num %d, exceed page's record capacity, page_num %d.", rid->slot_num, frame_->page_num());
-    return RC::INVALID_ARGUMENT;
-  }
-
-  Bitmap
+  RC rc = RC::SUCCESS;
   RecordPageHandler page_handler;
   if((rc = page_handler.init(*disk_buffer_pool_, rid->page_num, false)) != RC::SUCCESS) {
-    LOG_ERROR("Failed to init record_page_handler. page_number=%d, rc=%s", rid->page_num, strrc(rc));
+    LOG_ERROR("failed to init record_page_handler. page_number=%d. rc=%s", rid->page_num, strrc(rc));
     return rc;
   }
 
-  rc = page_handler.update_record(rid, offset, len, value);
+  rc= page_handler.update_record(rid, offset, len, value);
 
   return rc;
- lyreadonly_ == false, "cannot insert into page while the page is readonly" ;
-
- if (rid->slot_num >= page_header_->record_capacity{
-  LOG_ERROR("Invalid slot_num %d, exceed page's record capacity, page_num %d.", rid->slot_num, frame_->page_num());
-  return RC::INVALID_ARGUMENT;
- }
-
- Bitmap
 }
 
 RC RecordFileHandler::insert_record(const char *data, int record_size, RID *rid)
