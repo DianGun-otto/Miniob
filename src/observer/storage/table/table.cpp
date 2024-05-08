@@ -179,6 +179,18 @@ RC Table::open(const char *meta_file, const char *base_dir)
   return rc;
 }
 
+RC Table::update_record(Record &record, int offset, int len, Value &value)
+{
+  RC rc = RC::SUCCESS;
+  rc = record_handler_->update_record(&record.rid(), offset, len, value);
+  if(rc != RC::SUCCESS) {
+    LOG_WARN("failed to update record: %s", strrc(rc));
+    return rc;
+  }
+
+  return RC::SUCCESS;
+}
+
 RC Table::insert_record(Record &record)
 {
   RC rc = RC::SUCCESS;

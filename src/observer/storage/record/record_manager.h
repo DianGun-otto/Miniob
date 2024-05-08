@@ -159,6 +159,16 @@ public:
   RC cleanup();
 
   /**
+   * @brief 更新一条记录
+   *
+   * @param rid    如果插入成功，通过这个参数返回插入的位置
+   * @param offset 
+   * @param len
+   * @param value
+   */
+  RC update_record(RID *rid, int offset, int len, Value &value);
+
+  /**
    * @brief 插入一条记录
    *
    * @param data 要插入的记录
@@ -259,6 +269,16 @@ public:
    * @brief 关闭，做一些资源清理的工作
    */
   void close();
+
+   /**
+   * @brief 从指定文件中更新指定槽位的记录
+   *
+   * @param rid 待更新记录的标识符
+   * @param offset 该属性字段在表格所有字段中的偏移量
+   * @param len 字段长度
+   * @param value 字段的值
+   */
+  RC update_record(RID *rid, int offset, int len, Value &value);
 
   /**
    * @brief 从指定文件中删除指定槽位的记录

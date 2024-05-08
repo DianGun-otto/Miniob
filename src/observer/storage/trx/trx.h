@@ -137,6 +137,7 @@ public:
   Trx()          = default;
   virtual ~Trx() = default;
 
+  virtual RC update_record(Table *table, Record &record, int offset, int len, Value &value) = 0;                                  
   virtual RC insert_record(Table *table, Record &record)               = 0;
   virtual RC delete_record(Table *table, Record &record)               = 0;
   virtual RC visit_record(Table *table, Record &record, bool readonly) = 0;
