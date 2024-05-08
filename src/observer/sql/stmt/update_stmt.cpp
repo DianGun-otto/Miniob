@@ -54,6 +54,9 @@ RC UpdateStmt::create(Db *db, const UpdateSqlNode &update_sql, Stmt *&stmt)
   }
 
   const Field field(table, field_meta, 0);
+  if(field.attr_type != update_sql.value.attr_type){
+    return RC::INVALID_ARGUMENT;
+  }
 
   // 过滤算子
   std::unordered_map<std::string, Table *> table_map;
