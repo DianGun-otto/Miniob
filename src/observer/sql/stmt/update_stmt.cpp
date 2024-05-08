@@ -54,7 +54,7 @@ RC UpdateStmt::create(Db *db, const UpdateSqlNode &update_sql, Stmt *&stmt)
   }
 
   const Field field(table, field_meta, 0);
-  if(field.attr_type != update_sql.value.attr_type){
+  if(field.attr_type() != update_sql.value.attr_type()){
     return RC::INVALID_ARGUMENT;
   }
 
