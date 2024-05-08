@@ -53,6 +53,8 @@ RC UpdateStmt::create(Db *db, const UpdateSqlNode &update_sql, Stmt *&stmt)
     return RC::SCHEMA_FIELD_MISSING;
   }
 
+  const Field field(table, field_meta);
+
   // 过滤算子
   std::unordered_map<std::string, Table *> table_map;
   table_map.insert(std::pair<std::string, Table *>(table_name, table));
@@ -65,4 +67,11 @@ RC UpdateStmt::create(Db *db, const UpdateSqlNode &update_sql, Stmt *&stmt)
     static_cast<int>(update_sql.conditions.size()), 
     filter_stmt
   );
+    if (rc != RC::SUCCESS) {
+    LOG_WARN("failed to create filter statement. rc=%d:%s", rc, strrc(rc));
+    return rc;
+  }
+
+  stmt = new UpdateStmt(table, field, update_sql.value, filter_stmt);
+  return rc;
 }
