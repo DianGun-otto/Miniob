@@ -118,6 +118,11 @@ MvccTrx::MvccTrx(MvccTrxKit &kit, int32_t trx_id) : trx_kit_(kit), trx_id_(trx_i
 
 MvccTrx::~MvccTrx() {}
 
+RC MvccTrx::delete_record(Table *table, Record &record)
+{
+  return RC::SUCCESS;
+}
+
 RC MvccTrx::insert_record(Table *table, Record &record)
 {
   Field begin_field;
