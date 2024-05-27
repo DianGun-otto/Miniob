@@ -451,17 +451,18 @@ select_stmt:        /*  select 语句的语法解析树*/
       $$->selection.relations.push_back($4);
       std::reverse($$->selection.relations.begin(), $$->selection.relations.end());
 
+      if ($6 != nullptr) {
+        $$->selection.relations.insert($$->selection.relations.end(), $6->relations.begin(), $6->relations.end());
+        $$->selection.conditions.insert($$->selection.conditions.end(), $6->conditions.begin(), $6->conditions.end());
+        delete $6;
+      }
+
       if ($7 != nullptr) {
         $$->selection.conditions.swap(*$7);
         delete $7;
       }
       free($4);
 
-      if ($6 != nullptr) {
-        $$->selection.relations.insert($$->selection.relations.end(), $6->relations.begin(), $6->relations.end());
-        $$->selection.conditions.insert($$->selection.conditions.end(), $6->conditions.begin(), $6->conditions.end());
-        delete $6;
-      }
     }
     ;
 calc_stmt:
@@ -657,7 +658,7 @@ join_list:
         $$ = new JoinSqlNode;
       }
       $$->relations.push_back($3);
-      $$->conditions.swap(*$5);
+      $$->conditions.insert($$->conditions.end(), $5->begin(), $5->end());
     }
     ;
 
