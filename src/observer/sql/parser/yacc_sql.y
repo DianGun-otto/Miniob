@@ -93,6 +93,8 @@ ArithmeticExpr *create_arithmetic_expression(ArithmeticExpr::Type type,
         AND
         SET
         ON
+        INNER
+        JOIN
         LOAD
         DATA
         INFILE
@@ -112,13 +114,13 @@ ArithmeticExpr *create_arithmetic_expression(ArithmeticExpr::Type type,
   enum CompOp                       comp;
   enum AggrOp                       aggr;
   RelAttrSqlNode *                  rel_attr;
-
   std::vector<AttrInfoSqlNode> *    attr_infos;
   AttrInfoSqlNode *                 attr_info;
   Expression *                      expression;
   std::vector<Expression *> *       expression_list;
   std::vector<Value> *              value_list;
   std::vector<ConditionSqlNode> *   condition_list;
+  JoinSqlNode *                     join_list;
   std::vector<RelAttrSqlNode> *     rel_attr_list;
   std::vector<std::string> *        relation_list;
   char *                            string;
@@ -435,7 +437,7 @@ update_stmt:      /*  update 语句的语法解析树*/
     }
     ;
 select_stmt:        /*  select 语句的语法解析树*/
-    SELECT select_attr FROM ID rel_list where
+    SELECT select_attr FROM ID rel_list join_list where
     {
       $$ = new ParsedSqlNode(SCF_SELECT);
       if ($2 != nullptr) {
@@ -449,11 +451,17 @@ select_stmt:        /*  select 语句的语法解析树*/
       $$->selection.relations.push_back($4);
       std::reverse($$->selection.relations.begin(), $$->selection.relations.end());
 
-      if ($6 != nullptr) {
-        $$->selection.conditions.swap(*$6);
-        delete $6;
+      if ($7 != nullptr) {
+        $$->selection.conditions.swap(*$7);
+        delete $7;
       }
       free($4);
+
+      if ($6 != nullptr) {
+        $$->selection.relations.insert($$->selection.relations.end(), $6->relations.begin(), $6->relations.end());
+        $$->selection.conditions.insert($$->selection.conditions.end(), $6->conditions.begin(), $6->conditions.end());
+        delete $6;
+      }
     }
     ;
 calc_stmt:
@@ -636,6 +644,23 @@ rel_list:
       free($2);
     }
     ;
+
+join_list:
+    /* empty */
+    {
+      $$ = nullptr;
+    }
+    | INNER JOIN ID ON condition_list join_list {
+      if ($6 != nullptr) {
+        $$ = $6;
+      } else {
+        $$ = new JoinSqlNode;
+      }
+      $$->relations.push_back($3);
+      $$->conditions.swap(*$5);
+    }
+    ;
+
 where:
     /* empty */
     {

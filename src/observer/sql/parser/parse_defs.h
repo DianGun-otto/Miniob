@@ -112,6 +112,18 @@ struct SelectSqlNode
 };
 
 /**
+ * @brief 描述一个join语句
+ * @ingroup SQLParser
+ * @details 
+ */
+
+struct JoinSqlNode
+{
+  std::vector<std::string>      relations;   ///< 要连接的表
+  std::vector<ConditionSqlNode> conditions;  ///< 连接条件
+};
+
+/**
  * @brief 算术表达式计算的语法树
  * @ingroup SQLParser
  */
@@ -310,6 +322,7 @@ public:
   ErrorSqlNode        error;
   CalcSqlNode         calc;
   SelectSqlNode       selection;
+
   InsertSqlNode       insertion;
   DeleteSqlNode       deletion;
   UpdateSqlNode       update;
