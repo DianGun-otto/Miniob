@@ -665,8 +665,8 @@ join_list:
         free($2);
 
         if ($5 != nullptr) {
-          $$->relations.insert($$->relations.end(), $5->relations.begin(), $5.end());
-          $$->conditions.insert($$->conditions.end(), $5->conditions.begin(), $5.conditions.end());
+          $$->relations.insert($$->relations.end(), $5->relations.begin(), $5->end());
+          $$->conditions.insert($$->conditions.end(), $5->conditions.begin(), $5->conditions.end());
           delete $5;
         }
     }
