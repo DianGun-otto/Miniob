@@ -462,7 +462,6 @@ select_stmt:        /*  select 语句的语法解析树*/
         delete $7;
       }
       free($4);
-
     }
     ;
 calc_stmt:
@@ -651,14 +650,24 @@ join_list:
     {
       $$ = nullptr;
     }
-    | INNER JOIN ID ON condition_list join_list {
-      if ($6 != nullptr) {
-        $$ = $6;
-      } else {
-        $$ = new JoinSqlNode;
-      }
-      $$->relations.push_back($3);
-      $$->conditions.insert($$->conditions.end(), $5->begin(), $5->end());
+    | INNER join_list {
+      $$ = $2;
+    }
+    | JOIN ID ON condition_list join_list {      
+        $$ = new JoinSqlNode();
+        if ($4 != nullptr) {
+          $$->conditions.swap(*$4);
+          delete $4;
+        }
+
+        $$->relations.push_back($2);
+        free($2);
+
+        if ($5 != nullptr) {
+          $$->relations.insert($$->relations.end(), $5->relations.begin(), $5.end());
+          $$->conditions.insert($$->conditions.end(), $5->conditions.begin(), $5.conditions.end());
+          delete $5;
+        }
     }
     ;
 
