@@ -15,9 +15,7 @@ See the Mulan PSL v2 for more details. */
 #include "common/defs.h"
 #include <algorithm>
 #include <string.h>
-#include <ctime>
-#include <iomanip>
-
+#include<stdlib.h>
 namespace common {
 
 int compare_int(void *arg1, void *arg2)

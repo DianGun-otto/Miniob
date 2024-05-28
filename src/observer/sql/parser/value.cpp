@@ -19,6 +19,7 @@ See the Mulan PSL v2 for more details. */
 #include <ctime>
 #include <sstream>
 #include <iomanip>
+#include<stdlib.h>
 
 const char *ATTR_TYPE_NAME[] = {"undefined", "chars", "ints", "dates", "floats", "booleans"};
 
