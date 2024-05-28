@@ -98,4 +98,5 @@ int compare_float_and_string(void *arg1, void *arg2, int arg2_max_length)
   }
   return 0;
 }
+
 }  // namespace common
